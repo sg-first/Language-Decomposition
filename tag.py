@@ -44,6 +44,11 @@ def saveWordTag(path):
     file = open(path, 'wb')
     pickle.dump(word2Dimtag, file)
 
+def loadWordTag(path):
+    file = open(path, 'rb')
+    global word2Dimtag
+    word2Dimtag=pickle.load(file)
+
 def createWordDimtag(word):
     if not word in word2Dimtag.keys():
         word2Dimtag[word]=dimTag()
