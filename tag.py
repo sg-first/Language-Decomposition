@@ -19,13 +19,14 @@ class dimTag:
     def addTag(self,tag):
         retTag=copy.copy(self)
 
-        for dim,val in tag.dim2val:
+        for dim,val in tag.dim2val.items():
+            print(dim,val)
             retTag.add(dim,val)
 
         return retTag
 
     def avg(self,len):
-        for dim,_ in self.dim2val:
+        for dim,_ in self.dim2val.items():
             self.dim2val[dim]/=len
 
 model=None
