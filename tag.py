@@ -20,7 +20,6 @@ class dimTag:
         retTag=copy.copy(self)
 
         for dim,val in tag.dim2val.items():
-            print(dim,val)
             retTag.add(dim,val)
 
         return retTag
