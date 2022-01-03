@@ -1,7 +1,7 @@
 import json
 import stopWords.help as help
 
-punctuation=['，','。','）','（','“','”','；']
+punctuation=['，','。','）','（','“','”','；','？','、']
 
 def init(path):
     jsoncode=help.readTXT(path)

@@ -3,6 +3,7 @@ from gensim.models import Word2Vec
 import math
 import copy
 import pickle
+import numpy as np
 
 class dimTag:
     def __init__(self):
@@ -27,6 +28,14 @@ class dimTag:
     def avg(self,len):
         for dim,_ in self.dim2val.items():
             self.dim2val[dim]/=len
+
+    def norm(self):
+        valList=list(self.dim2val.values())
+        std=np.std(valList)
+
+        for dim, _ in self.dim2val.items():
+            self.dim2val[dim]=(self.dim2val[dim])/std
+
 
 model=None
 

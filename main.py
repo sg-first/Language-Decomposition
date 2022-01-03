@@ -39,16 +39,31 @@ tag.setWordTag('近','悲伤',0)
 tag.saveWordTag('tag.pk')
 
 import jieba
-content='我想，小时候总想往国外跑 一是想看看异域风景（虽然现在也才体会到别说中国 后边的小山坡就有够我探索的了）  另一是老家被毁 各种那啥一并发生 本身对家（归属地）的概念已经模糊/绝望了 所能想到的只有逃避（中二扮演人格分裂也是） 而国外（尤其美国）是我所能逃到的离这最远的地方'
-segList = jieba.cut(content, cut_all=False)
+import matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"]=["SimHei"]
+plt.rcParams["axes.unicode_minus"]=False
 
-sumDimtag=tag.dimTag()
-segListLen=0
-for w in segList:
-    if (not stopWords.stop.isStopWord(w)) and w in tag.word2Dimtag.keys():
-        dimtag=tag.word2Dimtag[w]
-        print(w,dimtag.dim2val)
-        sumDimtag=sumDimtag.addTag(dimtag)
-        segListLen+=1
-sumDimtag.avg(segListLen)
-print(sumDimtag.dim2val)
+content='我想，小时候总想往国外跑 一是想看看异域风景（虽然现在也才体会到别说中国 后边的小山坡就有够我探索的了）  另一是老家被毁 各种那啥一并发生 本身对家（归属地）的概念已经模糊/绝望了 所能想到的只有逃避（中二扮演人格分裂也是） 而国外（尤其美国）是我所能逃到的离这最远的地方'
+
+def test(content):
+    segList = jieba.cut(content, cut_all=False)
+
+    sumDimtag=tag.dimTag()
+    segListLen=0
+    for w in segList:
+        if (not stopWords.stop.isStopWord(w)) and w in tag.word2Dimtag.keys():
+            dimtag=tag.word2Dimtag[w]
+            print(w,dimtag.dim2val)
+            sumDimtag=sumDimtag.addTag(dimtag)
+            segListLen+=1
+    sumDimtag.norm()
+    print(content)
+    print(sumDimtag.dim2val)
+    plt.bar(sumDimtag.dim2val.keys(), sumDimtag.dim2val.values())
+    plt.show()
+
+test(content)
+
+while True:
+    content=input()
+    test(content)
