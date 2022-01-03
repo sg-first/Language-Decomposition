@@ -1,5 +1,6 @@
 import gensim
 import tag
+import stopWords.stop
 
 tag.loadWcModel('word2vec/word2vec_wx')
 print('loaded')
@@ -44,7 +45,7 @@ segList = jieba.cut(content, cut_all=False)
 sumDimtag=tag.dimTag()
 segListLen=0
 for w in segList:
-    if w in tag.word2Dimtag.keys():
+    if (not stopWords.stop.isStopWord(w)) and w in tag.word2Dimtag.keys():
         dimtag=tag.word2Dimtag[w]
         print(w,dimtag.dim2val)
         sumDimtag=sumDimtag.addTag(dimtag)
