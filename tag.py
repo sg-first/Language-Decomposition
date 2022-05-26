@@ -1,7 +1,6 @@
 from gensim.models.keyedvectors import KeyedVectors
 from gensim.models import Word2Vec
 import math
-import copy
 import pickle
 import numpy as np
 import copy
@@ -41,7 +40,7 @@ class dimTag:
            s+=abs(val)
         return s
 
-    def avg(self,len) -> float:
+    def avg(self,len):
         for dim,_ in self.dim2val.items():
             self.dim2val[dim]/=len
 
@@ -109,7 +108,7 @@ def getAnalogy(pair1, pair2, word1):
 
 if __name__=='__main__':
     loadWcModel('word2vec/word2vec_wx')
-    loadWordTag('tag.pk')
+    loadWordTag('love.pk')
     print('loaded')
     while True:
         word=input('word:')
@@ -120,6 +119,14 @@ if __name__=='__main__':
         elif word=='query':
             word = input('word:')
             print(word2Dimtag[word].dim2val)
+        elif word=='similar':
+            word = input('word:')
+            try:
+                res = model.most_similar(word)
+            except:
+                print('未找到')
+                continue
+            print(res)
         else:
             dim=input('dim:')
             val=input('val:')
