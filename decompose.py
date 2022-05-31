@@ -1,5 +1,6 @@
+import gensim
 import tag
-import copy
+import stopWords.stop
 
 class dimTag:
     def __init__(self):
@@ -36,7 +37,7 @@ class dimTag:
            s+=abs(val)
         return s
 
-    def avg(self,len) -> float:
+    def avg(self,len):
         for dim,_ in self.dim2val.items():
             self.dim2val[dim]/=len
 
@@ -50,38 +51,32 @@ class dimTag:
 tag.loadWcModel('word2vec/word2vec_wx')
 print('loaded')
 
-tag.loadWordTag('love.pk')
+tag.loadWordTag('love2.pk')
 
-def findNeighborhood(word:str, wordTag:tag.dimTag, targetTag:tag.dimTag):
-    simWord = tag.model.most_similar(word,topn=100)
+import jieba
+import matplotlib.pyplot as plt
+plt.rcParams["font.sans-serif"]=["SimHei"]
+plt.rcParams["axes.unicode_minus"]=False
 
-    minLossVal=None
-    minNewTag=None
-    minWord=None
-    for w, sim in simWord:
-        try:
-            newTag = tag.word2Dimtag[w]
-        except KeyError:
-            continue
-        diffTag = newTag.diffTag(targetTag)
-        oldDiffTag = wordTag.diffTag(targetTag)
-        lossVal = diffTag.absSum()
-        oldLossVal = oldDiffTag.absSum()
-        if oldLossVal<=lossVal:
-            continue
+def decompose(content):
+    segList = jieba.cut(content, cut_all=False)
 
-        if minLossVal is None or lossVal<minLossVal:
-            minLossVal=lossVal
-            minNewTag=newTag
-            minWord=w
+    sumDimtag=tag.dimTag()
+    segListLen=0
+    for w in segList:
+        if (not stopWords.stop.isStopWord(w)) and w in tag.word2Dimtag.keys():
+            dimtag=tag.word2Dimtag[w]
+            print(w,dimtag.dim2val)
+            sumDimtag=sumDimtag.addTag(dimtag)
+            segListLen+=1
+    sumDimtag.norm()
+    print(content)
+    print(sumDimtag.dim2val)
+    plt.bar(sumDimtag.dim2val.keys(), sumDimtag.dim2val.values())
+    plt.show()
 
-    if not minWord is None:
-        print(minWord,minNewTag.dim2val)
-        findNeighborhood(minWord,minNewTag,targetTag)
+decompose('我很崇拜你这种闪闪发光的人')
 
-word='知识'
-dimtag=tag.word2Dimtag[word] # 尝试变它
-print(word,dimtag.dim2val)
-targetTag=tag.dimTag()
-targetTag.dim2val={'发展关系':8}
-findNeighborhood(word,dimtag,targetTag)
+while True:
+    content=input()
+    decompose(content)
