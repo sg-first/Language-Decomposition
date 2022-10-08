@@ -1,4 +1,4 @@
-Language-Decomposition
+Natural Language Decomposition Algorithm for Deep Semantic Analysis
 =========
 Code Navigation
 -----------
